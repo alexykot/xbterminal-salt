@@ -1,0 +1,26 @@
+{## Start with  defaults from defaults.yaml ##}
+{% import_yaml "xbterminal-firmware/defaults.yaml" as default_settings %}
+
+{##
+Setup variable using grains['oscodename'] based logic, only add key:values here
+that differ from whats in defaults.yaml
+##}
+{% set os_code_map = salt['grains.filter_by']({
+    'jethro': {
+	'foo':'bar'
+  },
+  }
+  , grain="oscodename"
+  , merge=salt['pillar.get']('xbt:lookup'))
+%}
+
+{## Merge the flavor_map to the default settings ##}
+{% do default_settings.xbt.update(os_code_map) %}
+
+{## Merge in xbt:lookup pillar ##}
+{% set xbt = salt['pillar.get'](
+    'xbt',
+    default=default_settings.xbt,
+    merge=True
+  )
+%}

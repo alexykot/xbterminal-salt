@@ -1,0 +1,5 @@
+xbt:
+  version: '0.9.6.2015.12.24-b2-qm-jenki-r7.3'
+  themes:
+    demo: '0.9.6.2015.12.24-b2-qm-jenki-r7.3'
+    default: '0.9.6.2015.12.24-b2-qm-jenki-r7.3'
