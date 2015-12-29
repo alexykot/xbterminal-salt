@@ -1,0 +1,2 @@
+{% set _none = local_config.update(ext_config) %}
+{{ local_config|json }}
