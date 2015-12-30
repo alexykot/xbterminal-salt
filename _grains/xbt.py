@@ -19,6 +19,13 @@ def _byteify(input):
     else:
         return input
 
+def _xbt_get_batch_number():
+    batch_number_path='/srv/xbterminal/xbterminal/runtime/batch_number'
+    with open(batch_number_path) as batch_number_file:
+        batch_number = batch_number_file.read().strip()
+    return batch_number
+
+
 def xbt_get_config():
     grains = {}
     grains['xbt'] = {}
@@ -26,4 +33,5 @@ def xbt_get_config():
     with open(config_file_path) as local_config_file:
         local_config = json.loads(local_config_file.read())
     grains['xbt']['config']=_byteify(local_config)
+    grains['xbt']['batch_number'] = _xbt_get_batch_number()
     return grains
