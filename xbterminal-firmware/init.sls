@@ -1,5 +1,10 @@
 {% from "xbterminal-firmware/map.jinja" import xbt with context %}
 
+xbt/terminal/highstate:
+  event.send:
+    - data:
+        pillar: {{ xbt }}
+
 
 
 xbterminal-firmware:
@@ -26,14 +31,6 @@ xbterminal-firmware-themes:
       - xbterminal-firmware-theme-{{ theme }}: {{ version }}
   {%- endfor %}
 
-updated-system:
-  pkg:
-    - uptodate
-    - refresh: True
-    - require:
-      - pkg: xbterminal-firmware
-      - pkg: xbterminal-firmware-themes
-
 local_config:
   file:
     - managed
@@ -43,3 +40,31 @@ local_config:
     - context:
       local_config: {{ grains['xbt']['config'] }}
       ext_config: {{ xbt.config }}
+
+
+updated-system:
+  pkg:
+    - uptodate
+    - refresh: True
+    - require:
+      - pkg: xbterminal-firmware
+      - pkg: xbterminal-firmware-themes
+      - file: local_config
+      - event: xbt/terminal/highstate
+      - file: /etc/salt/minion.d/check.conf
+
+restart_terminal:
+  module:
+    - run
+    - name: system.reboot
+    - at_time: 1 #option requires 2015.8.3+ minion
+    - require:
+      - pkg: updated-system
+
+/etc/salt/minion.d/check.conf:
+  file:
+    - managed
+    - contents: |
+       startup_states: 'sls'
+       sls_list:
+         - xbterminal-firmware.check
