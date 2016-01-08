@@ -27,9 +27,9 @@ xbterminal-firmware-themes:
     - installed
     - hold: True
     - pkgs:
-	{%- for theme, version in xbt.themes.iteritems() %}
+    {%- for theme, version in xbt.themes.iteritems() %}
       - xbterminal-firmware-theme-{{ theme }}: {{ version }}
-  {%- endfor %}
+    {%- endfor %}
 
 local_config:
   file:
