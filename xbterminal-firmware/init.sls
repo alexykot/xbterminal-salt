@@ -66,5 +66,4 @@ restart_terminal:
     - managed
     - contents: |
        startup_states: 'sls'
-       sls_list:
-         - xbterminal-firmware.check
+       sls_list: xbterminal-firmware.check
