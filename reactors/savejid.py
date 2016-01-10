@@ -49,7 +49,7 @@ def run():
                                                                                          mid=data['id']))
         from salt.utils.http import query as httpclient
 
-        url = '{host}/api/v2/devices/{device_key}/confirm_activation'.format(host='http://stage.xbterminal.com',
+        url = '{host}/api/v2/devices/{device_key}/confirm_activation/'.format(host='http://stage.xbterminal.com',
                                                                              device_key=data['id'])
         payload = {"highstate_jid": hjid, "checkstate_jid": cjid, "data": data}
         result = httpclient(url=url, method='POST', data=json.dumps(payload),
