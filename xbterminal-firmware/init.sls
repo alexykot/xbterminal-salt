@@ -12,7 +12,7 @@ xbterminal-firmware:
     - installed
     - refresh: True
     - allow_updates: False
-    - version:  {{ xbt.version }}
+    - version:  '{{ xbt.version }}'
     - hold: True
   service:
     - running
@@ -28,7 +28,7 @@ xbterminal-firmware-themes:
     - hold: True
     - pkgs:
     {%- for theme, version in xbt.themes.iteritems() %}
-      - xbterminal-firmware-theme-{{ theme }}: {{ version }}
+      - xbterminal-firmware-theme-{{ theme }}: '{{ version }}'
     {%- endfor %}
 
 local_config:
