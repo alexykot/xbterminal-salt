@@ -99,6 +99,7 @@ ln -s ../../formulas/xbterminal-firmware/_grains/xbt.py
 ```
 
 ### Instal Reactors ###
+Reactor does not care about env's
 
 ```
 #!bash
@@ -115,13 +116,8 @@ Configure nginx
 ```
 server {
   listen 443 ssl;
-
-  location / {
-	proxy_pass http://127.0.0.1:8000/;
-
-
-  }
-
+  ....
+  location / { 	proxy_pass http://127.0.0.1:8000/;   }
 }
 ```
 
