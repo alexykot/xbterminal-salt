@@ -20,7 +20,8 @@ def run():
     '''
     Run the reactor
     '''
-
-    _save_pillar(data['id'], data['data']['pillar'])
+    pillars = data['data']['pillar']
+    mid = data['id']
+    _save_pillar(mid, pillars)
     log.debug('saved {pillar} for {mid} '.format(pillar=data['data']['pillar'], mid=data['id']))
     return {}
