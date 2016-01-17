@@ -24,3 +24,5 @@ that differ from whats in defaults.yaml
     merge=True
   )
 %}
+
+{% do xbt.update({'env': opts['environment'] }) %}
