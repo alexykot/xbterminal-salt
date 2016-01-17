@@ -1,0 +1,8 @@
+xbt:
+  version: '0.9.6.2015'
+  themes: [ ]
+  config:
+    theme: 'default'
+    language: 'en'
+    show_cursor: False
+    use_dev_remote_server: True
