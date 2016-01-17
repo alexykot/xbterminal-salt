@@ -36,7 +36,6 @@ external_auth:
       - '@wheel'
       - '@jobs'
       - 'state.*'
-      - cmd.*
       - system.*
       - grains.*
 
@@ -124,9 +123,10 @@ server {
 ### restart and enable all services ###
 
 Startup sequence
-```
-mongodb
-salt-master
-salt-api
-nginx 
-```
+
+
+curl -sSk https://localhost:8000/login \
+     -H 'Accept: application/x-yaml' \
+     -d username=salt-xbt-prod \
+     -d password=eeaa71eaad089e98bd0fc713f9878cc2 \
+     -d eauth=auto
