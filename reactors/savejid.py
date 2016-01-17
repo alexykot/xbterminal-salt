@@ -32,31 +32,58 @@ def _get_hjid(mid):
     mdb = conn[__opts__['mongo.db']]
     result = mdb.xbt_pillars.find_one({"_id": mid})
     conn.close()
-    return result['jid']
+    if result == None or 'jid' not in result:
+        return {}
+    else:
+        return result['jid']
 
+def _get_pillars(mid):
+    import pymongo
+    conn = pymongo.MongoClient()
+    mdb = conn[__opts__['mongo.db']]
+    result = mdb.xbt_pillars.find_one({"_id": mid})
+    conn.close()
+    if result == None or 'xbt' not in result:
+        return {}
+    else:
+        return result['xbt']
 
 def run():
     '''
     Run the reactor
     '''
+    mid = data['id']
+    cjid = data['jid']
     if data['fun'] == 'state.highstate':
         _save_jid_to_pillar(data['id'], data['jid'])
-        log.debug('saved {jid} for {mid} '.format(jid=data['jid'], mid=data['id']))
+        log.debug('saved {jid} for {mid} '.format(jid=data['jid'], mid=mid))
     elif data['fun'] == 'state.sls' and 'xbterminal-firmware.check' in data['fun_args']:
-        hjid = _get_hjid(data['id'])
-        cjid = data['jid']
+        hjid = _get_hjid(mid)
+        pillars = _get_pillars(mid)
         log.debug('check jid {cjid} called by  highstate {hjid} for minion {mid} '.format(cjid=cjid, hjid=hjid,
-                                                                                         mid=data['id']))
+                                                                                         mid=mid))
         from salt.utils.http import query as httpclient
 
-        url = '{host}/api/v2/devices/{device_key}/confirm_activation/'.format(host='http://stage.xbterminal.com',
-                                                                             device_key=data['id'])
+        try:
+            env = pillars['env']
+        except KeyError:
+            log.error('cannot retrieve env for {mid}: {e}'.format(mid=mid))
+            return {}
+
+
+        if pillars['env'] in ['None', 'base', 'prod']:
+            xbtapihost ='https://xbterminal.io'
+        elif pillars['env'] in [ 'dev', 'stage']:
+            xbtapihost = 'http://stage.xbterminal.com'
+
+        url = '{host}/api/v2/devices/{device_key}/confirm_activation/'.format(host=xbtapihost,
+                                                                             device_key=mid)
         payload = {"highstate_jid": hjid, "checkstate_jid": cjid, "data": data}
         result = httpclient(url=url, method='POST', data=json.dumps(payload),
                             headers=['content-type: application/json'])
 
         log.debug('check state status confirmation for {mid} sended, got result: {result}'.format(result=result,
-                                                                                                 mid=data['id']))
+                                                                                                 mid=mid))
     else:
         pass
     return {}
