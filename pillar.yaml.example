@@ -5,12 +5,8 @@ xbt:
     default: '0.9.6.2015'
   config:
     theme: 'default'
-    language: 'en'
-    show_cursor: False
-    use_dev_remote_server: False
     activation_code: 'XYZ90ZYX'
     language: 'en'
-    theme: 'default'
     last_started: 12345678.90
     show_cursor: False
     use_dev_remote_server: False
