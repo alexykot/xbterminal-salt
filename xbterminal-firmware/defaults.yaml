@@ -5,4 +5,4 @@ xbt:
     theme: 'default'
     language: 'en'
     show_cursor: False
-    use_dev_remote_server: True
+    use_dev_remote_server: False
