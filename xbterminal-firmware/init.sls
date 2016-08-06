@@ -7,8 +7,9 @@ xbt/terminal/highstate:
 
 
 
-xbterminal-firmware:
+xbterminal-package:
   pkg:
+    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - installed
     - refresh: True
     - allow_updates: False
@@ -47,7 +48,7 @@ updated-system:
     - uptodate
     - refresh: True
     - require:
-      - pkg: xbterminal-firmware
+      - pkg: xbterminal-package
       - pkg: xbterminal-firmware-themes
       - file: local_config
       - event: xbt/terminal/highstate
