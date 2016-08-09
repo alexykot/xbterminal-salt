@@ -15,14 +15,17 @@ xbterminal-package:
     - allow_updates: False
     - version:  '{{ xbt.version }}'
     - hold: True
+
+xbterminal-service:
   service:
     - running
+    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - enable: True
     - provider: systemd
     - watch:
       - file: local_config
 
-
+{% if 'themes' in xbt %}
 xbterminal-firmware-themes:
   pkg:
     - installed
@@ -31,6 +34,7 @@ xbterminal-firmware-themes:
     {%- for theme, version in xbt.themes.iteritems() %}
       - xbterminal-firmware-theme-{{ theme }}: '{{ version }}'
     {%- endfor %}
+{% endif %}
 
 local_config:
   file:
