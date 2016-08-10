@@ -30,6 +30,8 @@ xbterminal-firmware-themes:
   pkg:
     - installed
     - hold: True
+    - require_in:
+      - pkg: updated-system
     - pkgs:
     {%- for theme, version in xbt.themes.iteritems() %}
       - xbterminal-firmware-theme-{{ theme }}: '{{ version }}'
@@ -53,7 +55,6 @@ updated-system:
     - refresh: True
     - require:
       - pkg: xbterminal-package
-      - pkg: xbterminal-firmware-themes
       - file: local_config
       - event: xbt/terminal/highstate
       - file: /etc/salt/minion.d/check.conf
