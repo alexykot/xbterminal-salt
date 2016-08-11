@@ -7,29 +7,36 @@ xbt/terminal/highstate:
 
 
 
-xbterminal-firmware:
+xbterminal-package:
   pkg:
+    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - installed
     - refresh: True
     - allow_updates: False
     - version:  '{{ xbt.version }}'
     - hold: True
+
+xbterminal-service:
   service:
     - running
+    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - enable: True
     - provider: systemd
     - watch:
       - file: local_config
 
-
+{% if 'themes' in xbt %}
 xbterminal-firmware-themes:
   pkg:
     - installed
     - hold: True
+    - require_in:
+      - pkg: updated-system
     - pkgs:
     {%- for theme, version in xbt.themes.iteritems() %}
       - xbterminal-firmware-theme-{{ theme }}: '{{ version }}'
     {%- endfor %}
+{% endif %}
 
 local_config:
   file:
@@ -47,8 +54,7 @@ updated-system:
     - uptodate
     - refresh: True
     - require:
-      - pkg: xbterminal-firmware
-      - pkg: xbterminal-firmware-themes
+      - pkg: xbterminal-package
       - file: local_config
       - event: xbt/terminal/highstate
       - file: /etc/salt/minion.d/check.conf
