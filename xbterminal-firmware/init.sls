@@ -5,28 +5,36 @@ xbt/terminal/highstate:
     - data:
         pillar: {{ xbt }}
 
-
-
-xbterminal-package:
+xbterminal-rpc:
   pkg:
-    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - installed
     - refresh: True
     - allow_updates: False
-    - version:  '{{ xbt.version }}'
+    - version:  '{{ xbt.rpc_version }}'
     - hold: True
-
-xbterminal-service:
   service:
     - running
-    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - enable: True
     - provider: systemd
     - watch:
-      - file: local_config
+      - file: rpc_config
+
+xbterminal-gui:
+  pkg:
+    - installed
+    - refresh: True
+    - allow_updates: False
+    - version:  '{{ xbt.gui_version }}'
+    - hold: True
+  service:
+    - running
+    - enable: True
+    - provider: systemd
+    - watch:
+      - file: gui_config
 
 {% if 'themes' in xbt %}
-xbterminal-firmware-themes:
+xbterminal-gui-themes:
   pkg:
     - installed
     - hold: True
@@ -34,28 +42,39 @@ xbterminal-firmware-themes:
       - pkg: updated-system
     - pkgs:
     {%- for theme, version in xbt.themes.iteritems() %}
-      - xbterminal-firmware-theme-{{ theme }}: '{{ version }}'
+      - xbterminal-gui-theme-{{ theme }}: '{{ version }}'
     {%- endfor %}
 {% endif %}
 
-local_config:
+rpc_config:
   file:
     - managed
-    - name:  /srv/xbterminal/xbterminal/runtime/local_config
+    - name:  /srv/xbterminal/xbterminal/runtime/rpc_config
     - source: salt://xbterminal-firmware/files/local_config
     - template: jinja
     - context:
-      local_config: {{ grains['xbt']['config'] }}
-      ext_config: {{ xbt.config }}
+      local_config: {{ grains['xbt']['rpc_config'] }}
+      ext_config: {{ xbt.rpc_config }}
 
+gui_config:
+  file:
+    - managed
+    - name:  /srv/xbterminal/xbterminal/runtime/gui_config
+    - source: salt://xbterminal-firmware/files/local_config
+    - template: jinja
+    - context:
+      local_config: {{ grains['xbt']['gui_config'] }}
+      ext_config: {{ xbt.gui_config }}
 
 updated-system:
   pkg:
     - uptodate
     - refresh: True
     - require:
-      - pkg: xbterminal-package
-      - file: local_config
+      - pkg: xbterminal-rpc
+      - pkg: xbterminal-gui
+      - file: rpc_config
+      - file: gui_config
       - event: xbt/terminal/highstate
       - file: /etc/salt/minion.d/check.conf
 

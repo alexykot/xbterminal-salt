@@ -1,14 +1,12 @@
 xbt:
-  version: '0.9.6.2015'
+  rpc_version: '0.9.6.2015'
+  gui_version: '0.9.6.2015'
   themes:
     demo: '0.9.6.2015'
     default: '0.9.6.2015'
-  config:
+  rpc_config:
+    remote_server: 'prod'
+  gui_config:
     theme: 'default'
-    activation_code: 'XYZ90ZYX'
     language: 'en'
-    last_started: 12345678.90
-    show_cursor: False
-    use_dev_remote_server: False
-    use_keypad: False
-    disable_cctalk: False
+    show_cursor: false

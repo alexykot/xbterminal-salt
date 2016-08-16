@@ -1,25 +1,34 @@
 {% from "xbterminal-firmware/map.jinja" import xbt with context %}
 
-xbterminal-package:
+xbterminal-rpc:
   pkg:
     - installed
-    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - refresh: True
     - allow_updates: False
-    - version:  {{ xbt.version }}
+    - version:  {{ xbt.rpc_version }}
     - hold: True
-
-xbterminal-service:
   service:
     - running
-    - name: '{{ salt['grains.get']('xbt-package', 'xbterminal-rpc') }}'
     - enable: True
     - provider: systemd
 
+xbterminal-gui:
+  pkg:
+    - installed
+    - refresh: True
+    - allow_updates: False
+    - version:  {{ xbt.gui_version }}
+    - hold: True
+  service:
+    - running
+    - enable: True
+    - provider: systemd
 
 /etc/salt/minion.d/check.conf:
   file:
     - absent
     - require:
-      - pkg: xbterminal-package
-      - service: xbterminal-service
+      - pkg: xbterminal-rpc
+      - pkg: xbterminal-gui
+      - service: xbterminal-rpc
+      - service: xbterminal-gui

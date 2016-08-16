@@ -4,10 +4,11 @@
 import json
 import os
 
+CONFIGS = {
+   'rpc_config': '/srv/xbterminal/xbterminal/runtime/rpc_config',
+   'gui_config': '/srv/xbterminal/xbterminal/runtime/rpc_config',
+}
 
-def _xbt_get_config_file_path():
-    config_file_path = '/srv/xbterminal/xbterminal/runtime/local_config'
-    return config_file_path
 
 def _byteify(input):
     if isinstance(input, dict):
@@ -20,7 +21,7 @@ def _byteify(input):
         return input
 
 def _xbt_get_batch_number():
-    batch_number_path='/srv/xbterminal/xbterminal/runtime/batch_number'
+    batch_number_path = '/srv/xbterminal/xbterminal/runtime/batch_number'
     with open(batch_number_path) as batch_number_file:
         batch_number = batch_number_file.read().strip()
     return batch_number
@@ -29,9 +30,9 @@ def _xbt_get_batch_number():
 def xbt_get_config():
     grains = {}
     grains['xbt'] = {}
-    config_file_path=_xbt_get_config_file_path()
-    with open(config_file_path) as local_config_file:
-        local_config = json.loads(local_config_file.read())
-    grains['xbt']['config']=_byteify(local_config)
+    for config_name, config_path in CONFIGS.items():
+        with open(config_path) as config_file:
+            config = json.loads(config_file.read())
+        grains['xbt'][config_name] = _byteify(config)
     grains['xbt']['batch_number'] = _xbt_get_batch_number()
     return grains
