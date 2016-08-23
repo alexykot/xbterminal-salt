@@ -10,15 +10,16 @@ CONFIGS = {
 }
 
 
-def _byteify(input):
-    if isinstance(input, dict):
-        return {_byteify(key):_byteify(value) for key,value in input.iteritems()}
-    elif isinstance(input, list):
-        return [_byteify(element) for element in input]
-    elif isinstance(input, unicode):
-        return input.encode('utf-8')
+def _byteify(value):
+    if isinstance(value, dict):
+        return {_byteify(key): _byteify(value) for key, value in value.iteritems()}
+    elif isinstance(value, list):
+        return [_byteify(element) for element in value]
+    elif isinstance(value, unicode):
+        return value.encode('utf-8')
     else:
-        return input
+        return value
+
 
 def _xbt_get_batch_number():
     batch_number_path = '/srv/xbterminal/xbterminal/runtime/batch_number'
