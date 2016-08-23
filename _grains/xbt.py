@@ -6,7 +6,7 @@ import os
 
 CONFIGS = {
    'rpc_config': '/srv/xbterminal/xbterminal/runtime/rpc_config',
-   'gui_config': '/srv/xbterminal/xbterminal/runtime/rpc_config',
+   'gui_config': '/srv/xbterminal/xbterminal/runtime/gui_config',
 }
 
 
