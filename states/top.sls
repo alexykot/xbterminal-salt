@@ -1,4 +1,4 @@
-base:
+stage:
   '*':
     - xbterminal-firmware
 
