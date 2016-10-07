@@ -9,6 +9,7 @@ Install salt-master, salt-api 2015.8.3+
 Install MongoDB 3.0+
 Install git
 Install nginx
+install gitfs https://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html
 ```
 
 ### Create salt-master directory structure ###
@@ -30,6 +31,22 @@ rest_cherrypy:
   thread_pool: 10
   collect_stats: True
 
+fileserver_backend:
+  - git
+
+
+gitfs_provider: gitpython
+gitfs_base: master
+
+gitfs_remotes:
+  - file:///srv/salt/xbterminal-salt/:
+    - name: states
+    - root: states
+    - mountpoint: salt://
+    - base: master
+
+
+
 external_auth:
   pam:
     salt-xbt-dev:
@@ -45,21 +62,14 @@ token_expire: 3600
 
 log_level_logfile: debug
 
-file_roots:
-  base:
-    - /srv/salt/states/base/
-  dev:
-    - /srv/salt/states/dev/
-  stage:
-    - /srv/salt/states/stage/
-
 top_file_merging_strategy: same
 
 reactor:
   - 'xbt/terminal/highstate':
-    - /srv/salt/reactor/xbt/terminal/savepillars.py
+    - salt://_reactors/savepillars.py
   - 'salt/job/*/ret/*':
-    - /srv/salt/reactor/salt/job/ret/savejid.py
+    - salt://_reactors/savejid.py
+
 
 ext_pillar:
   - mongo: {collection: xbt_pillars, id_field: _id, fields: [xbt,jid]}
@@ -69,47 +79,8 @@ mongo.host: '127.0.0.1'
 mongo.port: 27017
 ```
 
-### Configure states tops systems ##
-
-Set in /srv/salt/states/{base,stage,dev}/top.sls
-Change env name
-
-```
-#!yaml
-base:
-  '*':
-    - xbterminal-firmware
-```
-
-### Install  xbterminal-salt ###
-Symlink xbterminal-fimware folder from formualas to  /srv/salt/states/{base,stage,dev}xbterminal-firmware
-
-```
-#!bash
-cd /srv/salt/states/base
-ln -s ../../formulas/xbterminal-firmware/xbterminal-firmware
-```
-
-### Install grains ###
-
-```
-#!bash
-mkdir /srv/salt/states/base/_grains
-cd /srv/salt/states/base/_grains
-ln -s ../../formulas/xbterminal-firmware/_grains/xbt.py
-```
-
-### Instal Reactors ###
-Reactor does not care about env's
-
-```
-#!bash
-mkdir -p /srv/salt/reactor/xbt/terminal/
-mkdir -p /srv/salt/reactor/salt/job/ret/
-cd /srv/salt/reactor/xbt/terminal/
-ln -s  ../../../formulas/xbterminal-firmware/reactors/savepillars.py 
-ln -s ../../../formulas/xbterminal-firmware/reactors/savejid.py
-```
+### Install project ###
+clone this repo to file:///srv/salt/xbterminal-salt/
 
 ### Configre nginx ###
 
