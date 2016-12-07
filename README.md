@@ -10,15 +10,7 @@ Install MongoDB 3.0+
 Install git
 Install nginx
 install gitfs https://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html
-```
 
-### Create salt-master directory structure ###
-```
-#!bash
-mkdir /srv/salt/states/{base,stage,dev}
-mkdir /srv/salt/reactor
-mkdir /srv/salt/formulas
-```
 
 ### Configure salt-master ###
 Example /etc/salt/master
