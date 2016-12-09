@@ -1,19 +1,19 @@
 # README #
 
-
 ## Installation ##
 
 ### install software ###
-```
+
 Install salt-master, salt-api 2015.8.3+
 Install MongoDB 3.0+
 Install git
 Install nginx
-install gitfs https://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html
-
+Install gitfs https://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html
 
 ### Configure salt-master ###
+
 Example /etc/salt/master
+
 ```
 #!yaml
 rest_cherrypy:
@@ -72,11 +72,13 @@ mongo.port: 27017
 ```
 
 ### Install project ###
+
 clone this repo to file:///srv/salt/xbterminal-salt/
 
 ### Configre nginx ###
 
 Configure nginx
+
 ```
 server {
   listen 443 ssl;
@@ -88,6 +90,7 @@ server {
 ### restart and enable all services ###
 
 Startup sequence
+
 ```
 mongodb
 salt-master
@@ -97,10 +100,10 @@ nginx
 
 
 ### check  api is working ###
+
 adduser salt-xbt-dev
 set password
 
-### ###
 ```
 #!bash
 curl -sSk https://localhost:8000/login \
