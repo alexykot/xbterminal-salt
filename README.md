@@ -1,14 +1,20 @@
 # README #
 
+## Automated Configuration ##
+
+Use xbterminal-infrasalt/xbtsam formula
+
 
 ## Installation ##
 
 ### install software ###
 ```
-Install salt-master, salt-api 2015.8.3+
+Install salt-master, salt-api 2016.3.4+
 Install MongoDB 3.0+
 Install git
 Install nginx
+Install pymongo
+Install python-futures
 install gitfs https://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html
 
 
@@ -21,7 +27,7 @@ rest_cherrypy:
   host: 127.0.0.1
   disable_ssl: True
   thread_pool: 10
-  collect_stats: True
+  collect_stats: False
 
 fileserver_backend:
   - git
@@ -53,6 +59,7 @@ external_auth:
 token_expire: 3600
 
 log_level_logfile: debug
+transport: tcp
 
 top_file_merging_strategy: same
 
