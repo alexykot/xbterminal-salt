@@ -4,11 +4,13 @@
 
 ### install software ###
 
+```
 Install salt-master, salt-api 2015.8.3+
 Install MongoDB 3.0+
 Install git
 Install nginx
 Install gitfs https://docs.saltstack.com/en/latest/topics/tutorials/gitfs.html
+```
 
 ### Configure salt-master ###
 
